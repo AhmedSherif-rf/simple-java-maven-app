@@ -12,6 +12,11 @@ pipeline {
             steps {
                 script{
                     echo 'building the docker image'
+                    withCredetials([usernamePassword(credentialId: 'dockerhub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]){
+                        sh 'docker build -t ahmedsherifmo/maven-app:mvn-2.0 .'
+                        sh "echo ${PASS} | docker login -u ${USER} --password-stdin"
+                        sh 'docker push ahmedsherifmo/maven-app:mvn-2.0'
+                    }
                 }
             }
         }
